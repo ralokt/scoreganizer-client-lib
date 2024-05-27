@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [ "$1" == fix ]; then
+    ruff check --fix .
+    ruff format .
+else
+    ruff check .
+    ruff format --diff .
+fi

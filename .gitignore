@@ -1,0 +1,6 @@
+__pycache__
+*.pyc
+.tox
+.coverage
+dist/
+scoreganizer_client_lib/_version.py

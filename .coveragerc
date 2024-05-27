@@ -1,0 +1,3 @@
+[run]
+omit = scoreganizer_client_lib/_version.py
+       scoreganizer_client_lib/version.py

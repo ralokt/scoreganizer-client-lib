@@ -1,0 +1,11 @@
+extend-exclude = [
+    "scoreganizer_client_lib/_version.py",
+]
+
+[lint]
+select = ["E", "F", "RUF", "UP"]
+
+ignore = [
+    "E501", # line too long - we use the formatter, what's left is there for a reason
+    "RUF012", # we don't do typing here
+]
