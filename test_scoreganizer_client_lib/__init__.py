@@ -327,16 +327,22 @@ def test_upload(requests_mock, tmp_path):
     sc.upload_file(_mkreplay(), "test.rmv")
     assert "application/x-viennasweeper" in requests_mock.last_request.text
     assert replay_content in requests_mock.last_request.text
+    assert 'filename="test.rmv"' in requests_mock.last_request.text
+    assert 'name="video"' in requests_mock.last_request.text
     # mime_type inferred from extension, trumping filename
     sc.upload_file(_mkreplay(), "test.rmv", ext="avf")
     assert "application/x-minesweeper-arbiter" in requests_mock.last_request.text
     assert replay_content in requests_mock.last_request.text
+    assert 'filename="test.rmv"' in requests_mock.last_request.text
+    assert 'name="video"' in requests_mock.last_request.text
     # mime_type explicitly passed, trumping everything else
     sc.upload_file(
         _mkreplay(), "test.rmv", ext="avf", mime_type="application/x-viennasweeper"
     )
     assert "application/x-viennasweeper" in requests_mock.last_request.text
     assert replay_content in requests_mock.last_request.text
+    assert 'filename="test.rmv"' in requests_mock.last_request.text
+    assert 'name="video"' in requests_mock.last_request.text
 
     replay_path = tmp_path / "test.rmv"
     with replay_path.open("w") as replay_file:
@@ -344,6 +350,8 @@ def test_upload(requests_mock, tmp_path):
     sc.upload_filename(replay_path)
     assert "application/x-viennasweeper" in requests_mock.last_request.text
     assert replay_content in requests_mock.last_request.text
+    assert 'filename="test.rmv"' in requests_mock.last_request.text
+    assert 'name="video"' in requests_mock.last_request.text
 
     # will retry once for invalid_data
     requests_mock.reset_mock()

@@ -1,3 +1,4 @@
+import os
 import time
 
 from .exceptions import ScoreganizerRetry
@@ -42,13 +43,14 @@ class Scores:
                 time.sleep(0.3)
 
     def _upload_file(self, file, filename, ext=None, mime_type=None):
+        filename = os.path.split(filename)[-1]
         if mime_type is None:
             if ext is None:
                 ext = filename.rsplit(".", 1)[-1]
             mime_type = self._mime_type_from_ext(ext)
         response = self.session.post(
             self._url("upload"),
-            files={"video": file},
+            files={"video": (filename, file)},
             data={"mime_type": mime_type},
         )
         self._sc._raise_if_error(response)
