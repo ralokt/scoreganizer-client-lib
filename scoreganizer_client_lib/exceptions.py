@@ -58,6 +58,14 @@ class ScoreganizerTokenTooRecent(ScoreganizerError):
     pass
 
 
+class ScoreganizerTournamentOver(ScoreganizerError):
+    pass
+
+
+class ScoreganizerModeConstraintViolated(ScoreganizerError):
+    pass
+
+
 EXCEPTION_CLS_MAP = {
     "too_early": ScoreganizerTooEarly,
     "key_exists": ScoreganizerKeyExists,
@@ -68,6 +76,8 @@ EXCEPTION_CLS_MAP = {
     "not_generated": ScoreganizerNotGenerated,
     "not_generated_yet": ScoreganizerNotGeneratedYet,
     "never_generated": ScoreganizerNeverGenerated,
+    "tournament_over": ScoreganizerTournamentOver,
+    "mode_constraint_violated": ScoreganizerModeConstraintViolated,
     "token_too_recent": ScoreganizerTokenTooRecent,
 }
 
@@ -92,18 +102,20 @@ def build_exception(response):
 
 
 __all__ = [
+    "NetworkException",
     "ScoreganizerError",
-    "ScoreganizerWait",
-    "ScoreganizerKeyExists",
-    "ScoreganizerTooEarly",
     "ScoreganizerInvalidData",
     "ScoreganizerInvalidLoginData",
-    "ScoreganizerNotLoggedIn",
-    "ScoreganizerRetry",
+    "ScoreganizerKeyExists",
+    "ScoreganizerModeConstraintViolated",
+    "ScoreganizerNeverGenerated",
     "ScoreganizerNotGenerated",
     "ScoreganizerNotGeneratedYet",
-    "ScoreganizerNeverGenerated",
+    "ScoreganizerNotLoggedIn",
+    "ScoreganizerRetry",
     "ScoreganizerTokenTooRecent",
+    "ScoreganizerTooEarly",
+    "ScoreganizerTournamentOver",
+    "ScoreganizerWait",
     "build_exception",
-    "NetworkException",
 ]
