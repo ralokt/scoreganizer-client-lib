@@ -57,21 +57,30 @@ class Tournaments:
         )
         self._sc._raise_if_error(response)
 
-    def gen_key(self, tournament):
+    def _key_response(self, response, with_expiry):
+        self._sc._raise_if_error(response)
+        response_json = response.json()
+        key = response_json.get("key")
+        if not with_expiry:
+            return key
+        expiry = response_json.get("key_expiry")
+        if expiry is not None:
+            expiry = Tournament.deserialize_datetime(expiry)
+        return (key, expiry)
+
+    def gen_key(self, tournament, with_expiry=False):
         pk = int(tournament)
         response = self.session.post(
             self._url(f"gen_key/{pk}"),
         )
-        self._sc._raise_if_error(response)
-        return response.json().get("key")
+        return self._key_response(response, with_expiry)
 
-    def get_key(self, tournament):
+    def get_key(self, tournament, with_expiry=False):
         pk = int(tournament)
         response = self.session.get(
             self._url(f"get_key/{pk}"),
         )
-        self._sc._raise_if_error(response)
-        return response.json().get("key")
+        return self._key_response(response, with_expiry)
 
     def player_confirm(self, tournament):
         pk = int(tournament)
