@@ -1,3 +1,4 @@
+import datetime
 from contextlib import nullcontext
 from io import BytesIO
 import time  # noqa: F401  We need to import this to patch time.sleep
@@ -29,6 +30,24 @@ def tournament_json(seq):
         "hide_results": False,
         "status": "not_logged_in",
     }
+
+
+@pytest.fixture
+def expiry_str():
+    return "2025-09-06T13:37:42"
+
+
+@pytest.fixture
+def expiry_dt():
+    return datetime.datetime(
+        year=2025,
+        month=9,
+        day=6,
+        hour=13,
+        minute=37,
+        second=42,
+        tzinfo=datetime.timezone.utc,
+    )
 
 
 @pytest.fixture
@@ -231,21 +250,65 @@ def test_tournaments_my_active_nologin(requests_mock, tournaments_json):
 def test_tournaments_get_key(requests_mock, t_param):
     requests_mock.get(
         api_path("tournaments/get_key/42069"),
-        json={"key": "asdf"},
+        json={
+            "key": "asdf",
+            "key_expiry": None,
+        },
         status_code=200,
     )
     ts = Scoreganizer().tournaments
     assert ts.get_key(t_param(42069)) == "asdf"
+    assert ts.get_key(t_param(42069), with_expiry=True) == ("asdf", None)
+
+
+def test_tournaments_get_key_expiry(
+    requests_mock,
+    t_param,
+    expiry_str,
+    expiry_dt,
+):
+    requests_mock.get(
+        api_path("tournaments/get_key/42069"),
+        json={
+            "key": "asdf",
+            "key_expiry": expiry_str,
+        },
+        status_code=200,
+    )
+    ts = Scoreganizer().tournaments
+    assert ts.get_key(t_param(42069), with_expiry=True) == ("asdf", expiry_dt)
 
 
 def test_tournaments_gen_key(requests_mock, t_param):
     requests_mock.post(
         api_path("tournaments/gen_key/42069"),
-        json={"key": "asdf"},
+        json={
+            "key": "asdf",
+            "key_expiry": None,
+        },
         status_code=201,
     )
     ts = Scoreganizer().tournaments
     assert ts.gen_key(t_param(42069)) == "asdf"
+    assert ts.gen_key(t_param(42069), with_expiry=True) == ("asdf", None)
+
+
+def test_tournaments_gen_key_expiry(
+    requests_mock,
+    t_param,
+    expiry_str,
+    expiry_dt,
+):
+    requests_mock.post(
+        api_path("tournaments/gen_key/42069"),
+        json={
+            "key": "asdf",
+            "key_expiry": expiry_str,
+        },
+        status_code=201,
+    )
+    ts = Scoreganizer().tournaments
+    assert ts.gen_key(t_param(42069), with_expiry=True) == ("asdf", expiry_dt)
 
 
 def test_tournaments_wait_key_gen(requests_mock, t_param):
