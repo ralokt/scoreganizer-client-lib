@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from dataclasses import dataclass
 
 from .exceptions import ScoreganizerKeyExists, ScoreganizerTooEarly
@@ -22,11 +22,16 @@ class Tournament:
         return [cls.deserialize(entry) for entry in data]
 
     @classmethod
+    def deserialize_datetime(cls, dtstr):
+        utc = timezone.utc
+        return datetime.fromisoformat(dtstr).replace(tzinfo=utc)
+
+    @classmethod
     def deserialize(cls, data):
         initkwargs = {
             **data,
-            "start": datetime.fromisoformat(data["start"]),
-            "end": datetime.fromisoformat(data["end"]),
+            "start": cls.deserialize_datetime(data["start"]),
+            "end": cls.deserialize_datetime(data["end"]),
         }
         return cls(**initkwargs)
 
