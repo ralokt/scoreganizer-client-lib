@@ -37,4 +37,3 @@ def get_version_tuple():
 
 
 VERSION_TUPLE = get_version_tuple()
-VERSION_TUPLE = (0, 9, 0)
