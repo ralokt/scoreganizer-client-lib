@@ -4,7 +4,7 @@ import time
 from requests.exceptions import RequestException as NetworkException
 
 
-class ScoreganizerError(BaseException):
+class ScoreganizerError(Exception):
     def __init__(self, error):
         self.error = error
 
