@@ -99,6 +99,13 @@ class Tournaments:
             except ScoreganizerKeyExists:
                 return self.get_key(pk)
 
+    def result(self, tournament):
+        pk = int(tournament)
+        url = self._url(f"result/{pk}")
+        response = self._sc.session.get(url)
+        self._sc._raise_if_error(response)
+        return response.json().get("result")
+
     def _list(self, name):
         response = self.session.get(self._url(name))
         self._sc._raise_if_error(response)
