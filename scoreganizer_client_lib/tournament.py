@@ -124,7 +124,7 @@ class Tournaments:
         url = self._url(f"result/{pk}")
         response = self._sc.session.get(url)
         self._sc._raise_if_error(response)
-        return Result(**response.json().get("result"))
+        return Result(**response.json())
 
     def _list(self, name):
         response = self.session.get(self._url(name))
