@@ -11,6 +11,11 @@ class Score:
     timeth: int
     replay: str|None
 
+    def full_replay_url(self, scoreganizer):
+        if self.replay is None:
+            return None
+        return f"{scoreganizer._host_url}{self.replay}"
+
 
 class Scores:
     def __init__(self, scoreganizer):
