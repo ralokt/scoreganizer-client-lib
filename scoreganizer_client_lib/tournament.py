@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 from dataclasses import dataclass
 
 from .exceptions import ScoreganizerKeyExists, ScoreganizerTooEarly
+from .score import Score
 
 
 @dataclass
@@ -37,6 +38,25 @@ class Tournament:
 
     def __int__(self):
         return self.id
+
+
+@dataclass
+class ResultLine:
+    place: int
+    player: str
+    scores: list[Score]
+
+    def __post_init__(self):
+        self.scores = [Score(**score) for score in self.scores]
+
+
+@dataclass
+class Result:
+    head: list
+    result: list[ResultLine]
+
+    def __post_init__(self):
+        self.result = [ResultLine(**row) for row in self.result]
 
 
 class Tournaments:

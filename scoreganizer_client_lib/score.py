@@ -1,7 +1,15 @@
 import os
 import time
+from dataclasses import dataclass
 
 from .exceptions import ScoreganizerRetry
+
+
+@dataclass
+class Score:
+    pk: int|None
+    timeth: int
+    replay: str|None
 
 
 class Scores:
