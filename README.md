@@ -184,7 +184,6 @@ filelike objects, and the uploaded mimetype can likewise be set.
 ### Handling exceptions
 
 ```python
-
 from requests.exceptions import RequestException
 from scoreganizer_client_lib import Scoreganizer
 from scoreganizer_client_lib.exceptions import ScoreganizerInvalidLoginData
