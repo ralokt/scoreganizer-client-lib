@@ -1,7 +1,9 @@
 from datetime import datetime, timezone
 from dataclasses import dataclass
+from typing import List
 
 from .exceptions import ScoreganizerKeyExists, ScoreganizerTooEarly
+from .score import Score
 
 
 @dataclass
@@ -37,6 +39,25 @@ class Tournament:
 
     def __int__(self):
         return self.id
+
+
+@dataclass
+class ResultLine:
+    place: int
+    player: str
+    scores: List[Score]
+
+    def __post_init__(self):
+        self.scores = [Score(**score) for score in self.scores]
+
+
+@dataclass
+class Result:
+    head: list
+    result: List[ResultLine]
+
+    def __post_init__(self):
+        self.result = [ResultLine(**row) for row in self.result]
 
 
 class Tournaments:
@@ -98,6 +119,13 @@ class Tournaments:
                 ex.do_wait()
             except ScoreganizerKeyExists:
                 return self.get_key(pk)
+
+    def result(self, tournament):
+        pk = int(tournament)
+        url = self._url(f"result/{pk}")
+        response = self._sc.session.get(url)
+        self._sc._raise_if_error(response)
+        return Result(**response.json())
 
     def _list(self, name):
         response = self.session.get(self._url(name))

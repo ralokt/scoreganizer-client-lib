@@ -55,9 +55,13 @@ class Scoreganizer:
         return HTTPDigestAuth(username, password)
 
     @property
-    def _base_url(self):
+    def _host_url(self):
         proto = "https" if self.https else "http"
-        return f"{proto}://{self.host}:{self.port}/api/"
+        return f"{proto}://{self.host}:{self.port}"
+
+    @property
+    def _base_url(self):
+        return f"{self._host_url}/api/"
 
     def _url(self, path):
         return f"{self._base_url}{path}"

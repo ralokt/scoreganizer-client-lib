@@ -1,6 +1,7 @@
 extend-exclude = [
     "scoreganizer_client_lib/_version.py",
 ]
+target-version = "py38"
 
 [lint]
 select = ["E", "F", "RUF", "UP"]
