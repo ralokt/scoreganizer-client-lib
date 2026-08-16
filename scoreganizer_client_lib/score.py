@@ -1,5 +1,6 @@
 import os
 import time
+from typing import Optional
 from dataclasses import dataclass
 
 from .exceptions import ScoreganizerRetry
@@ -7,9 +8,9 @@ from .exceptions import ScoreganizerRetry
 
 @dataclass
 class Score:
-    pk: int|None
+    pk: Optional[int]
     timeth: int
-    replay: str|None
+    replay: Optional[str]
 
     def full_replay_url(self, scoreganizer):
         if self.replay is None:
